@@ -78,6 +78,10 @@ export function SettingsDrawer({ open, onClose }: { open: boolean; onClose: () =
             <input type="checkbox" checked={settings.wordTooltips} onChange={(e) => update({ wordTooltips: e.target.checked })} />
             <span>{t('wordTooltips')}</span>
           </label>
+          <label className="switch">
+            <input type="checkbox" checked={settings.showReflections} onChange={(e) => update({ showReflections: e.target.checked })} />
+            <span>{t('showReflections')}</span>
+          </label>
         </section>
 
         <section className="drawer__section">

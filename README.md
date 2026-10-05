@@ -49,12 +49,28 @@ npm run verify:data  # integrity check of public/data
 - Client-side search over the imlaei text, diacritic-insensitive, with chapter-name and `2:14` reference matching.
 - Everything persists in `localStorage`; no backend required.
 
+## "علمتني آية" reflections
+
+`data/reflections/allamatni-aya.json` holds the 105 verse reflections from the booklet *علمتني آية*
+(Mulhim bin Muhammad Khair Dubani, 2015, `aya.pdf`), transcribed from the PDF. Each entry carries the
+verse reference, the quoted fragment, the author's comment, the page in the PDF, and `printedRef`
+(the reference exactly as printed, kept when it differed from the verified one; see `note`).
+
+`scripts/build-reflections.mjs` resolves surah names to numbers, checks that every quoted fragment
+really occurs in the KFGQPC text of the referenced verse(s), and writes `public/data/reflections.json`
+(with the full Uthmani text of each verse attached). The build fails if any fragment does not match.
+
+In the app, verses that appear in the book get a gold marker and a spark badge. When you scroll onto one
+of them it glows and a pulsing panel shows the reflection. The badge expands the reflection inline.
+Toggle in settings: "Show A Verse Taught Me reflections".
+
 ## Project layout
 
 ```
 data/kfgqpc/        raw KFGQPC source files (+ their read.me notes)
-scripts/            build-data.mjs, verify-data.mjs, chapter-meta.mjs
-public/data/        generated JSON (chapters, surah/N, tafsir/N, pages, juzs, search-index)
+data/reflections/   curated "علمتني آية" reflections (source of truth)
+scripts/            build-data.mjs, build-reflections.mjs, verify-data.mjs, chapter-meta.mjs
+public/data/        generated JSON (chapters, surah/N, tafsir/N, pages, juzs, search-index, reflections)
 public/fonts/       KFGQPC fonts
 src/lib/            types, fetch layer, formatting, i18n, Arabic normalisation, URL resolution
 src/hooks/          settings, user data (bookmarks/highlights), async loader, toast

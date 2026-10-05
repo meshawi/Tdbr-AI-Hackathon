@@ -1,4 +1,4 @@
-import type { Chapter, ChapterData, Range, SearchRow, TafsirData } from './types';
+import type { Chapter, ChapterData, Range, ReflectionsFile, SearchRow, TafsirData } from './types';
 
 const cache = new Map<string, Promise<unknown>>();
 
@@ -21,6 +21,7 @@ export const getTafsir = (id: number) => fetchJson<TafsirData>(`data/tafsir/${id
 export const getPagesIndex = () => fetchJson<Record<string, Range[]>>('data/pages.json');
 export const getJuzIndex = () => fetchJson<Record<string, Range[]>>('data/juzs.json');
 export const getSearchIndex = () => fetchJson<SearchRow[]>('data/search-index.json');
+export const getReflections = () => fetchJson<ReflectionsFile>('data/reflections.json');
 
 /** Load every verse of the given ranges, grouped by chapter, preserving Mushaf order. */
 export async function getRanges(ranges: Range[]) {

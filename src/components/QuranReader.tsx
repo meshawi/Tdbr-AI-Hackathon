@@ -2,12 +2,14 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSettings } from '../hooks/useSettings';
 import { useUserData } from '../hooks/useUserData';
+import { useReflections } from '../hooks/useReflections';
 import { num } from '../lib/format';
-import type { Chapter, Segment } from '../lib/types';
+import type { Chapter, Reflection, Segment } from '../lib/types';
 import { ChapterHeader } from './ChapterHeader';
 import { ReadingView } from './ReadingView';
 import { VerseItem } from './VerseItem';
 import type { WordSelection } from './VerseText';
+import { ReflectionPulse } from './ReflectionBox';
 import { ArrowUpIcon } from './Icons';
 
 interface Props {
@@ -29,6 +31,12 @@ export function QuranReader({ segments, initialVerseKey = null, showHeaders = tr
   const [position, setPosition] = useState<Position | null>(null);
   const [showTop, setShowTop] = useState(false);
   const lang = settings.lang;
+
+  // "علمتني آية" reflections: verses from the book glow while they are anywhere in the viewport.
+  const reflections = useReflections(settings.showReflections);
+  const reflectionKeys = useMemo(() => new Set(reflections.byVerse.keys()), [reflections]);
+  const [visibleKeys, setVisibleKeys] = useState<Map<string, number>>(new Map()); // key -> top offset
+  const [dismissed, setDismissed] = useState<Set<string>>(new Set());
 
   const chaptersById = useMemo(() => new Map(segments.map((s) => [s.chapter.id, s.chapter])), [segments]);
 
@@ -73,6 +81,43 @@ export function QuranReader({ segments, initialVerseKey = null, showHeaders = tr
     return () => { window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onScroll); cancelAnimationFrame(raf); };
   }, [chaptersById, segments, settings.view, setLastRead]);
 
+  // Observe every verse that has a reflection; it glows while any part of it is inside the viewport.
+  useEffect(() => {
+    if (!settings.showReflections || !reflectionKeys.size) { setVisibleKeys(new Map()); return; }
+    const nodes = [...document.querySelectorAll<HTMLElement>('[data-verse-key]')].filter((el) => reflectionKeys.has(el.dataset.verseKey ?? ''));
+    if (!nodes.length) return;
+    const io = new IntersectionObserver((entries) => {
+      setVisibleKeys((prev) => {
+        const next = new Map(prev);
+        for (const e of entries) {
+          const key = (e.target as HTMLElement).dataset.verseKey ?? '';
+          if (e.isIntersecting) next.set(key, e.boundingClientRect.top); else next.delete(key);
+        }
+        return next;
+      });
+      // A dismissed panel comes back once its verse has left the viewport and re-entered.
+      setDismissed((prev) => {
+        const next = new Set(prev);
+        for (const e of entries) if (!e.isIntersecting) next.delete((e.target as HTMLElement).dataset.verseKey ?? '');
+        return next.size === prev.size ? prev : next;
+      });
+    }, { rootMargin: '-70px 0px 0px 0px', threshold: 0 });
+    nodes.forEach((n) => io.observe(n));
+    return () => { io.disconnect(); setVisibleKeys(new Map()); };
+  }, [reflectionKeys, segments, settings.view, settings.showReflections]);
+
+  const glowKeys = useMemo(() => new Set(visibleKeys.keys()), [visibleKeys]);
+
+  // The panel shows the topmost visible reflection verse that has not been dismissed.
+  const pulse = useMemo<{ key: string; reflections: Reflection[] } | null>(() => {
+    const candidates = [...visibleKeys.entries()].filter(([k]) => !dismissed.has(k)).sort((a, b) => a[1] - b[1]);
+    for (const [key] of candidates) {
+      const list = reflections.byVerse.get(key);
+      if (list?.length) return { key, reflections: list };
+    }
+    return null;
+  }, [visibleKeys, dismissed, reflections]);
+
   // Close the word popover when clicking anywhere else or pressing Escape.
   useEffect(() => {
     if (!selectedWord) return;
@@ -102,7 +147,7 @@ export function QuranReader({ segments, initialVerseKey = null, showHeaders = tr
       </div>
 
       {settings.view === 'reading' ? (
-        <ReadingView segments={segments} activeKey={activeKey} onActivate={activate} selectedWord={selectedWord} onSelectWord={setSelectedWord} />
+        <ReadingView segments={segments} activeKey={activeKey} glowKeys={glowKeys} reflectionKeys={reflectionKeys} onActivate={activate} selectedWord={selectedWord} onSelectWord={setSelectedWord} />
       ) : (
         segments.map((seg) => (
           <section key={seg.chapter.id} className="segment">
@@ -110,20 +155,33 @@ export function QuranReader({ segments, initialVerseKey = null, showHeaders = tr
               ? <ChapterHeader chapter={seg.chapter} />
               : <ChapterHeader chapter={seg.chapter} compact />)}
             <div className="verses">
-              {seg.verses.map((v) => (
-                <VerseItem
-                  key={v.n}
-                  chapter={seg.chapter}
-                  verse={v}
-                  active={activeKey === `${seg.chapter.id}:${v.n}`}
-                  onActivate={() => activate(`${seg.chapter.id}:${v.n}`)}
-                  selectedWord={selectedWord}
-                  onSelectWord={setSelectedWord}
-                />
-              ))}
+              {seg.verses.map((v) => {
+                const key = `${seg.chapter.id}:${v.n}`;
+                return (
+                  <VerseItem
+                    key={v.n}
+                    chapter={seg.chapter}
+                    verse={v}
+                    active={activeKey === key}
+                    glow={glowKeys.has(key)}
+                    reflections={reflections.byVerse.get(key)}
+                    onActivate={() => activate(key)}
+                    selectedWord={selectedWord}
+                    onSelectWord={setSelectedWord}
+                  />
+                );
+              })}
             </div>
           </section>
         ))
+      )}
+
+      {pulse && (
+        <ReflectionPulse
+          verseKey={pulse.key}
+          reflections={pulse.reflections}
+          onDismiss={() => setDismissed((d) => new Set(d).add(pulse.key))}
+        />
       )}
 
       <button className={`to-top ${showTop ? 'is-visible' : ''}`} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} aria-label="top">

@@ -8,6 +8,8 @@ import { VerseText, type WordSelection } from './VerseText';
 interface Props {
   segments: Segment[];
   activeKey: string | null;
+  glowKeys: Set<string>;
+  reflectionKeys: Set<string>;
   onActivate: (key: string) => void;
   selectedWord: WordSelection | null;
   onSelectWord: (sel: WordSelection | null) => void;
@@ -22,7 +24,7 @@ interface PageBlock {
  * Mushaf-style continuous text grouped by the Madinah Mushaf page each verse starts on
  * (page numbers are from the KFGQPC data). Verses stay individually addressable.
  */
-export function ReadingView({ segments, activeKey, onActivate, selectedWord, onSelectWord }: Props) {
+export function ReadingView({ segments, activeKey, glowKeys, reflectionKeys, onActivate, selectedWord, onSelectWord }: Props) {
   const { settings, t } = useSettings();
   const { verseHighlights } = useUserData();
   const lang = settings.lang;
@@ -46,7 +48,8 @@ export function ReadingView({ segments, activeKey, onActivate, selectedWord, onS
           <div className="mushaf-page__text quran-text" dir="rtl" lang="ar">
             {block.items.map(({ chapter, verse }) => {
               const key = verseKey(chapter.id, verse.n);
-              const cls = ['verse-inline', activeKey === key ? 'is-active' : '', verseHighlights.has(key) ? 'is-highlighted' : ''].filter(Boolean).join(' ');
+              const hasRef = reflectionKeys.has(key);
+              const cls = ['verse-inline', activeKey === key ? 'is-active' : '', verseHighlights.has(key) ? 'is-highlighted' : '', hasRef ? 'has-reflection' : '', hasRef && glowKeys.has(key) ? 'is-glow' : ''].filter(Boolean).join(' ');
               return (
                 <Fragment key={key}>
                   {verse.n === 1 && (

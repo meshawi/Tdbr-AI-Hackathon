@@ -56,6 +56,32 @@ export interface Segment {
   verses: Verse[];
 }
 
+/** One entry from the book "علمتني آية" (public/data/reflections.json). */
+export interface Reflection {
+  id: number;
+  surah: number;
+  surahName: string;
+  surahNameEn: string;
+  slug: string;
+  ayahFrom: number;
+  ayahTo: number;
+  verseKey: string;
+  verseKeys: string[];
+  quote: string;
+  text: string | null;
+  comment: string;
+  extraRefs?: { surah: number; surahName: string; ayahFrom: number; ayahTo: number; verseKey: string; quote: string }[];
+  printedRef: string;
+  note?: string;
+  page: number;
+}
+
+export interface ReflectionsFile {
+  source: { title: string; titleEn: string; author: string; authorEn: string; date: string };
+  count: number;
+  reflections: Reflection[];
+}
+
 export type Lang = 'ar' | 'en';
 export type Theme = 'light' | 'dark' | 'sepia';
 export type ViewMode = 'verse' | 'reading';

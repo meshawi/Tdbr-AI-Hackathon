@@ -10,6 +10,8 @@ export interface Settings {
   view: ViewMode;
   showTafsir: boolean;
   wordTooltips: boolean;
+  /** glow + pulse panel for verses that have a reflection in "علمتني آية" */
+  showReflections: boolean;
 }
 
 const DEFAULTS: Settings = {
@@ -19,6 +21,7 @@ const DEFAULTS: Settings = {
   view: 'verse',
   showTafsir: false,
   wordTooltips: true,
+  showReflections: true,
 };
 
 const KEY = 'quran.settings.v1';

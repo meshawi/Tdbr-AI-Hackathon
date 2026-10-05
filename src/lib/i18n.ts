@@ -72,6 +72,17 @@ const strings = {
   lastRead: { ar: 'آخر قراءة', en: 'Continue reading' },
   wordNumber: { ar: 'رقم الكلمة', en: 'Word number' },
   selectVerse: { ar: 'تحديد الآية', en: 'Select verse' },
+  reflections: { ar: 'علمتني آية', en: 'A Verse Taught Me' },
+  reflectionLabel: { ar: 'التعليق', en: 'Reflection' },
+  reflectionSource: { ar: 'من كتاب «علمتني آية» لملهم دوباني', en: 'From the book "A Verse Taught Me" by Mulhim Dubani' },
+  showReflections: { ar: 'إظهار فوائد «علمتني آية» عند الوصول إلى الآية', en: 'Show "A Verse Taught Me" reflections when reaching a verse' },
+  reflectionBadge: { ar: 'لهذه الآية فائدة في «علمتني آية»', en: 'This verse has a reflection in "A Verse Taught Me"' },
+  reflectionNumber: { ar: 'فائدة رقم', en: 'Reflection no.' },
+  alsoCites: { ar: 'ويستشهد بـ', en: 'Also cites' },
+  dismiss: { ar: 'إخفاء', en: 'Dismiss' },
+  ask: { ar: 'اسأل', en: 'Ask' },
+  askPlaceholder: { ar: 'عندك سؤال عن هذه الفائدة؟ مثال: لم أفهم، اشرح أكثر', en: 'Have a question about this reflection? e.g. I did not understand, explain further' },
+  questionPending: { ar: 'تم تسجيل سؤالك (الإجابة بالذكاء الاصطناعي قريبًا)', en: 'Question saved (AI answer coming soon)' },
 } as const;
 
 export type StringKey = keyof typeof strings;
