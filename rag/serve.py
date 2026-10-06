@@ -377,7 +377,7 @@ def build_context(verse: tuple[int, int] | None, question: str, note: str | None
     for r in reflections_by_verse().get(f"{s}:{a}", []):
         trace["reflections"].append({"id": r["id"], "comment": r["comment"]})
         parts.append(f"فائدة من كتاب «علمتني آية» (ملهم دوباني) عن هذه الآية: {r['comment']}")
-    hits = search(question, top_k=VERSE_SOURCES, surah=s, ayah=a, rerank=True)
+    hits = search(question, top_k=VERSE_SOURCES, surah=s, ayah=a)   # rerank/prefetch follow RAG_RERANK / RAG_PREFETCH
     if hits:
         parts.append("مصادر التفسير للآية الحالية:")
         for h in hits:
@@ -392,7 +392,7 @@ def build_context(verse: tuple[int, int] | None, question: str, note: str | None
 
 
 def run_tool(query: str, sources: list[dict]) -> tuple[str, list[dict]]:
-    hits = search(query, top_k=TOOL_SOURCES, rerank=True)
+    hits = search(query, top_k=TOOL_SOURCES)
     known = {(x["book_id"], x["surah"], x["ayah_from"], x["ayah_to"], x["book_page"]) for x in sources}
     added: list[dict] = []
     lines = []
