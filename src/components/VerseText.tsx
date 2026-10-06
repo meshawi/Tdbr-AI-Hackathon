@@ -86,7 +86,7 @@ function WordPopover({ chapter, verse, index, wordKeyStr, onClose }: { chapter: 
     <span className="word-popover" dir={lang === 'ar' ? 'rtl' : 'ltr'} onClick={(e) => e.stopPropagation()} role="dialog">
       <span className="word-popover__word quran-text" dir="rtl">{word}</span>
       <span className="word-popover__meta">
-        {chapter.nameEn} {num(chapter.id, lang)}:{num(verse.n, lang)} · {t('word')} {num(index + 1, lang)} / {num(verse.w.length, lang)}
+        {chapter.nameAr} {num(chapter.id, lang)}:{num(verse.n, lang)} · {t('word')} {num(index + 1, lang)} / {num(verse.w.length, lang)}
       </span>
       {simple && (
         <span className="word-popover__row"><span className="muted">{t('simpleSpelling')}:</span> <span dir="rtl">{simple}</span></span>

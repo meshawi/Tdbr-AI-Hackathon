@@ -1,15 +1,20 @@
-import { Fragment, useMemo } from 'react';
+import { Fragment, useMemo, useState } from 'react';
 import { useSettings } from '../hooks/useSettings';
 import { useUserData } from '../hooks/useUserData';
 import { BISMILLAH, num, verseKey } from '../lib/format';
-import type { Chapter, Segment, Verse } from '../lib/types';
+import type { Chapter, Reflection, Segment, Verse } from '../lib/types';
+import { ReflectionBox } from './ReflectionBox';
+import { TafsirBox } from './TafsirBox';
+import { VerseActions } from './VerseActions';
 import { VerseText, type WordSelection } from './VerseText';
 
 interface Props {
   segments: Segment[];
   activeKey: string | null;
   glowKeys: Set<string>;
-  reflectionKeys: Set<string>;
+  /** verses whose reflection panel was closed: faint static tint instead of the glow */
+  fadedKeys: Set<string>;
+  reflectionsByVerse: Map<string, Reflection[]>;
   onActivate: (key: string) => void;
   selectedWord: WordSelection | null;
   onSelectWord: (sel: WordSelection | null) => void;
@@ -24,7 +29,7 @@ interface PageBlock {
  * Mushaf-style continuous text grouped by the Madinah Mushaf page each verse starts on
  * (page numbers are from the KFGQPC data). Verses stay individually addressable.
  */
-export function ReadingView({ segments, activeKey, glowKeys, reflectionKeys, onActivate, selectedWord, onSelectWord }: Props) {
+export function ReadingView({ segments, activeKey, glowKeys, fadedKeys, reflectionsByVerse, onActivate, selectedWord, onSelectWord }: Props) {
   const { settings, t } = useSettings();
   const { verseHighlights } = useUserData();
   const lang = settings.lang;
@@ -48,8 +53,9 @@ export function ReadingView({ segments, activeKey, glowKeys, reflectionKeys, onA
           <div className="mushaf-page__text quran-text" dir="rtl" lang="ar">
             {block.items.map(({ chapter, verse }) => {
               const key = verseKey(chapter.id, verse.n);
-              const hasRef = reflectionKeys.has(key);
-              const cls = ['verse-inline', activeKey === key ? 'is-active' : '', verseHighlights.has(key) ? 'is-highlighted' : '', hasRef ? 'has-reflection' : '', hasRef && glowKeys.has(key) ? 'is-glow' : ''].filter(Boolean).join(' ');
+              const reflections = settings.showReflections ? reflectionsByVerse.get(key) : undefined;
+              const hasRef = !!reflections?.length;
+              const cls = ['verse-inline', activeKey === key ? 'is-active' : '', verseHighlights.has(key) ? 'is-highlighted' : '', hasRef ? 'has-reflection' : '', hasRef && glowKeys.has(key) ? 'is-glow' : '', hasRef && fadedKeys.has(key) ? 'is-faded' : ''].filter(Boolean).join(' ');
               return (
                 <Fragment key={key}>
                   {verse.n === 1 && (
@@ -69,6 +75,7 @@ export function ReadingView({ segments, activeKey, glowKeys, reflectionKeys, onA
                   >
                     <VerseText chapter={chapter} verse={verse} selectedWord={selectedWord} onSelectWord={onSelectWord} inline />
                   </span>
+                  {activeKey === key && <SelectedVersePanel chapter={chapter} verse={verse} reflections={reflections} />}
                 </Fragment>
               );
             })}
@@ -80,6 +87,35 @@ export function ReadingView({ segments, activeKey, glowKeys, reflectionKeys, onA
           </footer>
         </section>
       ))}
+    </div>
+  );
+}
+
+/** The verse-by-verse actions for the selected verse, shown right under it inside the Mushaf text. */
+function SelectedVersePanel({ chapter, verse, reflections }: { chapter: Chapter; verse: Verse; reflections?: Reflection[] }) {
+  const { settings } = useSettings();
+  const [tafsirOpen, setTafsirOpen] = useState(false);
+  const [reflectionOpen, setReflectionOpen] = useState(false);
+  const lang = settings.lang;
+  const hasReflection = !!reflections?.length;
+  const showTafsir = settings.showTafsir || tafsirOpen;
+
+  return (
+    <div className="mushaf-verse-panel" onClick={(e) => e.stopPropagation()}>
+      <div className="mushaf-verse-panel__bar">
+        <span className="mushaf-verse-panel__key">{chapter.nameAr} {num(chapter.id, lang)}:{num(verse.n, lang)}</span>
+        <VerseActions
+          chapter={chapter}
+          verse={verse}
+          tafsirOpen={showTafsir}
+          onToggleTafsir={() => setTafsirOpen((o) => !o)}
+          hasReflection={hasReflection}
+          reflectionOpen={reflectionOpen}
+          onToggleReflection={() => setReflectionOpen((o) => !o)}
+        />
+      </div>
+      {hasReflection && reflectionOpen && <ReflectionBox reflections={reflections!} />}
+      {showTafsir && <TafsirBox chapterId={chapter.id} verse={verse.n} />}
     </div>
   );
 }

@@ -67,6 +67,10 @@ const strings = {
   sortAsc: { ar: 'ترتيب تصاعدي', en: 'Ascending' },
   sortDesc: { ar: 'ترتيب تنازلي', en: 'Descending' },
   home: { ar: 'الرئيسية', en: 'Home' },
+  mainSite: { ar: 'موقع تدبّر', en: 'tdbr.app' },
+  privacy: { ar: 'الخصوصية', en: 'Privacy' },
+  terms: { ar: 'الشروط', en: 'Terms' },
+  religiousPolicy: { ar: 'السياسة الشرعية', en: 'Religious policy' },
   menu: { ar: 'القائمة', en: 'Menu' },
   close: { ar: 'إغلاق', en: 'Close' },
   lastRead: { ar: 'آخر قراءة', en: 'Continue reading' },
@@ -81,7 +85,7 @@ const strings = {
   alsoCites: { ar: 'ويستشهد بـ', en: 'Also cites' },
   dismiss: { ar: 'إخفاء', en: 'Dismiss' },
   ask: { ar: 'اسأل', en: 'Ask' },
-  askPlaceholder: { ar: 'عندك سؤال عن هذه الفائدة؟ مثال: لم أفهم، اشرح أكثر', en: 'Have a question about this reflection? e.g. I did not understand, explain further' },
+  askPlaceholder: { ar: 'هل لديك سؤال عن سبب النزول، أو المعنى، أو موضوعات السورة؟', en: 'Have a question about this reflection? e.g. I did not understand, explain further' },
   questionPending: { ar: 'تم تسجيل سؤالك (الإجابة بالذكاء الاصطناعي قريبًا)', en: 'Question saved (AI answer coming soon)' },
 } as const;
 

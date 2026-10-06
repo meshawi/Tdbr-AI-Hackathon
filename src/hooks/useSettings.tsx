@@ -29,7 +29,8 @@ const KEY = 'quran.settings.v1';
 function load(): Settings {
   try {
     const raw = localStorage.getItem(KEY);
-    return raw ? { ...DEFAULTS, ...JSON.parse(raw) } : DEFAULTS;
+    // The site is Arabic-only; ignore a language saved by older versions.
+    return raw ? { ...DEFAULTS, ...JSON.parse(raw), lang: 'ar' } : DEFAULTS;
   } catch {
     return DEFAULTS;
   }

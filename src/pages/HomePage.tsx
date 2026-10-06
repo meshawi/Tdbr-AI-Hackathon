@@ -89,7 +89,7 @@ export function HomePage() {
               <span className="surah-card__num"><span>{num(c.id, lang)}</span></span>
               <span className="surah-card__names">
                 <span className="surah-card__en">{lang === 'ar' ? c.nameAr : c.nameEn}</span>
-                <span className="surah-card__meaning muted">{lang === 'ar' ? c.nameEn : c.meaningEn}</span>
+                <span className="surah-card__meaning muted">{t(c.revelation)}</span>
               </span>
               <span className="surah-card__side">
                 <span className="surah-card__ar quran-text" dir="rtl">{c.nameAr}</span>
@@ -119,11 +119,6 @@ export function HomePage() {
           })}
         </div>
       )}
-
-      <footer className="site-footer">
-        <p>{t('sourceNote')}</p>
-        <p><a href="https://qurancomplex.gov.sa/quran-dev/" target="_blank" rel="noreferrer">qurancomplex.gov.sa/quran-dev</a></p>
-      </footer>
     </main>
   );
 }

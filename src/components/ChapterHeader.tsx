@@ -16,9 +16,6 @@ export function ChapterHeader({ chapter, compact = false }: { chapter: Chapter; 
         <h1 className="chapter-header__name" dir="rtl">
           <span className="chapter-header__label">سُورَةُ</span> {chapter.nameAr}
         </h1>
-        <div className="chapter-header__en">
-          {chapter.nameEn} <span className="muted">· {chapter.meaningEn}</span>
-        </div>
       </div>
       {!compact && chapter.bismillahPre && (
         <p className="quran-text bismillah" dir="rtl" lang="ar">{BISMILLAH}</p>

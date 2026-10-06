@@ -5,6 +5,7 @@ import { useAsync } from '../hooks/useAsync';
 import { getChapters } from '../lib/api';
 import { parseVerseRef } from '../lib/text';
 import { chapterPath } from '../lib/format';
+import { BRAND_NAME, MAIN_SITE } from '../lib/brand';
 import { MoonIcon, SearchIcon, SettingsIcon, SunIcon } from './Icons';
 
 export function Navbar({ onOpenSettings }: { onOpenSettings: () => void }) {
@@ -32,10 +33,10 @@ export function Navbar({ onOpenSettings }: { onOpenSettings: () => void }) {
     <header className="navbar">
       <div className="navbar__inner">
         <Link to="/" className="brand" aria-label={t('home')}>
-          <span className="brand__mark" aria-hidden>۞</span>
+          <img className="brand__logo" src="/apple-touch-icon.png" alt="" width={40} height={40} />
           <span className="brand__text">
-            <span className="brand__title">{t('appTitle')}</span>
-            <span className="brand__sub">{t('appSubtitle')}</span>
+            <span className="brand__title">{BRAND_NAME}</span>
+            <span className="brand__sub">{t('appTitle')}</span>
           </span>
         </Link>
 
@@ -56,15 +57,13 @@ export function Navbar({ onOpenSettings }: { onOpenSettings: () => void }) {
         </form>
 
         <div className="navbar__actions">
-          <button className="icon-btn" onClick={() => update({ lang: settings.lang === 'ar' ? 'en' : 'ar' })} aria-label={t('language')} title={t('language')}>
-            <span className="icon-btn__text">{settings.lang === 'ar' ? 'EN' : 'ع'}</span>
-          </button>
           <button className="icon-btn" onClick={() => update({ theme: nextTheme })} aria-label={t('theme')} title={t('theme')}>
             {settings.theme === 'dark' ? <SunIcon /> : <MoonIcon />}
           </button>
           <button className="icon-btn" onClick={onOpenSettings} aria-label={t('settings')} title={t('settings')}>
             <SettingsIcon />
           </button>
+          <a className="navbar__cta" href={MAIN_SITE}>{t('mainSite')}</a>
         </div>
       </div>
     </header>

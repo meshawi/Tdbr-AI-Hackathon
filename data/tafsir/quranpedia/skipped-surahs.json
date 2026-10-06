@@ -1,0 +1,916 @@
+{
+ "rule": "Only surahs containing at least one reflection verse from \"علمتني آية\" are fetched now (smallest first).",
+ "fetchedSurahsInOrder": [
+  {
+   "surah": 103,
+   "nameAr": "العَصر",
+   "versesCount": 3,
+   "reflectionIds": [
+    34
+   ]
+  },
+  {
+   "surah": 94,
+   "nameAr": "الشَّرح",
+   "versesCount": 8,
+   "reflectionIds": [
+    3
+   ]
+  },
+  {
+   "surah": 98,
+   "nameAr": "البَينَة",
+   "versesCount": 8,
+   "reflectionIds": [
+    74
+   ]
+  },
+  {
+   "surah": 99,
+   "nameAr": "الزَّلزَلة",
+   "versesCount": 8,
+   "reflectionIds": [
+    31
+   ]
+  },
+  {
+   "surah": 104,
+   "nameAr": "الهُمَزة",
+   "versesCount": 9,
+   "reflectionIds": [
+    87
+   ]
+  },
+  {
+   "surah": 66,
+   "nameAr": "التَّحرِيم",
+   "versesCount": 12,
+   "reflectionIds": [
+    42
+   ]
+  },
+  {
+   "surah": 49,
+   "nameAr": "الحُجُرَات",
+   "versesCount": 18,
+   "reflectionIds": [
+    51
+   ]
+  },
+  {
+   "surah": 87,
+   "nameAr": "الأعلى",
+   "versesCount": 19,
+   "reflectionIds": [
+    75
+   ]
+  },
+  {
+   "surah": 58,
+   "nameAr": "المُجَادلة",
+   "versesCount": 22,
+   "reflectionIds": [
+    99
+   ]
+  },
+  {
+   "surah": 48,
+   "nameAr": "الفَتح",
+   "versesCount": 29,
+   "reflectionIds": [
+    94
+   ]
+  },
+  {
+   "surah": 57,
+   "nameAr": "الحدِيد",
+   "versesCount": 29,
+   "reflectionIds": [
+    67
+   ]
+  },
+  {
+   "surah": 89,
+   "nameAr": "الفَجر",
+   "versesCount": 30,
+   "reflectionIds": [
+    70
+   ]
+  },
+  {
+   "surah": 31,
+   "nameAr": "لُقمَان",
+   "versesCount": 34,
+   "reflectionIds": [
+    15
+   ]
+  },
+  {
+   "surah": 83,
+   "nameAr": "المُطَففين",
+   "versesCount": 36,
+   "reflectionIds": [
+    47,
+    87
+   ]
+  },
+  {
+   "surah": 45,
+   "nameAr": "الجاثِية",
+   "versesCount": 37,
+   "reflectionIds": [
+    96
+   ]
+  },
+  {
+   "surah": 35,
+   "nameAr": "فَاطِر",
+   "versesCount": 45,
+   "reflectionIds": [
+    76
+   ]
+  },
+  {
+   "surah": 52,
+   "nameAr": "الطُّور",
+   "versesCount": 49,
+   "reflectionIds": [
+    57,
+    63,
+    79
+   ]
+  },
+  {
+   "surah": 14,
+   "nameAr": "إبراهِيم",
+   "versesCount": 52,
+   "reflectionIds": [
+    86
+   ]
+  },
+  {
+   "surah": 42,
+   "nameAr": "الشُّورى",
+   "versesCount": 53,
+   "reflectionIds": [
+    48
+   ]
+  },
+  {
+   "surah": 41,
+   "nameAr": "فُصِّلَت",
+   "versesCount": 54,
+   "reflectionIds": [
+    41
+   ]
+  },
+  {
+   "surah": 74,
+   "nameAr": "المُدثر",
+   "versesCount": 56,
+   "reflectionIds": [
+    46
+   ]
+  },
+  {
+   "surah": 51,
+   "nameAr": "الذَّاريَات",
+   "versesCount": 60,
+   "reflectionIds": [
+    7
+   ]
+  },
+  {
+   "surah": 53,
+   "nameAr": "النَّجم",
+   "versesCount": 62,
+   "reflectionIds": [
+    12,
+    61
+   ]
+  },
+  {
+   "surah": 33,
+   "nameAr": "الأحزَاب",
+   "versesCount": 73,
+   "reflectionIds": [
+    37,
+    104
+   ]
+  },
+  {
+   "surah": 8,
+   "nameAr": "الأنفَال",
+   "versesCount": 75,
+   "reflectionIds": [
+    14
+   ]
+  },
+  {
+   "surah": 25,
+   "nameAr": "الفُرقَان",
+   "versesCount": 77,
+   "reflectionIds": [
+    11,
+    64,
+    88
+   ]
+  },
+  {
+   "surah": 55,
+   "nameAr": "الرَّحمٰن",
+   "versesCount": 78,
+   "reflectionIds": [
+    66
+   ]
+  },
+  {
+   "surah": 28,
+   "nameAr": "القَصَص",
+   "versesCount": 88,
+   "reflectionIds": [
+    36,
+    82,
+    83,
+    92
+   ]
+  },
+  {
+   "surah": 38,
+   "nameAr": "صٓ",
+   "versesCount": 88,
+   "reflectionIds": [
+    95
+   ]
+  },
+  {
+   "surah": 43,
+   "nameAr": "الزُّخرُف",
+   "versesCount": 89,
+   "reflectionIds": [
+    58
+   ]
+  },
+  {
+   "surah": 19,
+   "nameAr": "مَريَم",
+   "versesCount": 98,
+   "reflectionIds": [
+    23,
+    29,
+    43
+   ]
+  },
+  {
+   "surah": 10,
+   "nameAr": "يُونس",
+   "versesCount": 109,
+   "reflectionIds": [
+    44
+   ]
+  },
+  {
+   "surah": 18,
+   "nameAr": "الكَهف",
+   "versesCount": 110,
+   "reflectionIds": [
+    20,
+    28,
+    53,
+    72,
+    100,
+    101,
+    102,
+    103
+   ]
+  },
+  {
+   "surah": 12,
+   "nameAr": "يُوسُف",
+   "versesCount": 111,
+   "reflectionIds": [
+    30,
+    40,
+    50,
+    55,
+    55,
+    60,
+    68,
+    71,
+    81,
+    85
+   ]
+  },
+  {
+   "surah": 17,
+   "nameAr": "الإسرَاء",
+   "versesCount": 111,
+   "reflectionIds": [
+    4,
+    17,
+    22,
+    27,
+    32
+   ]
+  },
+  {
+   "surah": 21,
+   "nameAr": "الأنبيَاء",
+   "versesCount": 112,
+   "reflectionIds": [
+    9,
+    18
+   ]
+  },
+  {
+   "surah": 5,
+   "nameAr": "المَائدة",
+   "versesCount": 120,
+   "reflectionIds": [
+    26,
+    78
+   ]
+  },
+  {
+   "surah": 11,
+   "nameAr": "هُود",
+   "versesCount": 123,
+   "reflectionIds": [
+    91
+   ]
+  },
+  {
+   "surah": 9,
+   "nameAr": "التوبَة",
+   "versesCount": 129,
+   "reflectionIds": [
+    6,
+    25,
+    45
+   ]
+  },
+  {
+   "surah": 20,
+   "nameAr": "طه",
+   "versesCount": 135,
+   "reflectionIds": [
+    1,
+    5,
+    21,
+    56,
+    62,
+    69,
+    105
+   ]
+  },
+  {
+   "surah": 6,
+   "nameAr": "الأنعَام",
+   "versesCount": 165,
+   "reflectionIds": [
+    24,
+    89
+   ]
+  },
+  {
+   "surah": 4,
+   "nameAr": "النِّسَاء",
+   "versesCount": 176,
+   "reflectionIds": [
+    54,
+    80,
+    89
+   ]
+  },
+  {
+   "surah": 37,
+   "nameAr": "الصَّافَات",
+   "versesCount": 182,
+   "reflectionIds": [
+    39,
+    49,
+    65
+   ]
+  },
+  {
+   "surah": 3,
+   "nameAr": "آل عِمران",
+   "versesCount": 200,
+   "reflectionIds": [
+    2,
+    13,
+    31,
+    33,
+    90
+   ]
+  },
+  {
+   "surah": 7,
+   "nameAr": "الأعرَاف",
+   "versesCount": 206,
+   "reflectionIds": [
+    10,
+    52,
+    77
+   ]
+  },
+  {
+   "surah": 26,
+   "nameAr": "الشعراء",
+   "versesCount": 227,
+   "reflectionIds": [
+    16,
+    38,
+    73
+   ]
+  },
+  {
+   "surah": 2,
+   "nameAr": "البَقَرَة",
+   "versesCount": 286,
+   "reflectionIds": [
+    8,
+    19,
+    35,
+    59,
+    84,
+    93,
+    97,
+    98
+   ]
+  }
+ ],
+ "skippedCount": 67,
+ "skipped": [
+  {
+   "surah": 1,
+   "nameAr": "الفَاتِحة",
+   "nameEn": "Al-Fātiḥah",
+   "versesCount": 7,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon",
+   "note": "already fetched and verified as the pilot surah"
+  },
+  {
+   "surah": 13,
+   "nameAr": "الرَّعد",
+   "nameEn": "Ar-Ra‘d",
+   "versesCount": 43,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 15,
+   "nameAr": "الحِجر",
+   "nameEn": "Al-Ḥijr",
+   "versesCount": 99,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 16,
+   "nameAr": "النَّحل",
+   "nameEn": "An-Naḥl",
+   "versesCount": 128,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 22,
+   "nameAr": "الحج",
+   "nameEn": "Al-Ḥajj",
+   "versesCount": 78,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 23,
+   "nameAr": "المؤمنُون",
+   "nameEn": "Al-Mu’minūn",
+   "versesCount": 118,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 24,
+   "nameAr": "النور",
+   "nameEn": "An-Nūr",
+   "versesCount": 64,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 27,
+   "nameAr": "النَّمل",
+   "nameEn": "An-Naml",
+   "versesCount": 93,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 29,
+   "nameAr": "العَنكبُوت",
+   "nameEn": "Al-‘Ankabūt",
+   "versesCount": 69,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 30,
+   "nameAr": "الرُّوم",
+   "nameEn": "Ar-Rūm",
+   "versesCount": 60,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 32,
+   "nameAr": "السَّجدة",
+   "nameEn": "As-Sajdah",
+   "versesCount": 30,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 34,
+   "nameAr": "سَبإ",
+   "nameEn": "Saba’",
+   "versesCount": 54,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 36,
+   "nameAr": "يسٓ",
+   "nameEn": "Yā-Sīn",
+   "versesCount": 83,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 39,
+   "nameAr": "الزُّمَر",
+   "nameEn": "Az-Zumar",
+   "versesCount": 75,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 40,
+   "nameAr": "غَافِر",
+   "nameEn": "Ghāfir",
+   "versesCount": 85,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 44,
+   "nameAr": "الدُّخان",
+   "nameEn": "Ad-Dukhān",
+   "versesCount": 59,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 46,
+   "nameAr": "الأحقَاف",
+   "nameEn": "Al-Aḥqāf",
+   "versesCount": 35,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 47,
+   "nameAr": "مُحمد",
+   "nameEn": "Muḥammad",
+   "versesCount": 38,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 50,
+   "nameAr": "قٓ",
+   "nameEn": "Qāf",
+   "versesCount": 45,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 54,
+   "nameAr": "القَمَر",
+   "nameEn": "Al-Qamar",
+   "versesCount": 55,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 56,
+   "nameAr": "الوَاقِعة",
+   "nameEn": "Al-Wāqi‘ah",
+   "versesCount": 96,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 59,
+   "nameAr": "الحَشر",
+   "nameEn": "Al-Ḥashr",
+   "versesCount": 24,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 60,
+   "nameAr": "المُمتَحنَة",
+   "nameEn": "Al-Mumtaḥanah",
+   "versesCount": 13,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 61,
+   "nameAr": "الصَّف",
+   "nameEn": "Aṣ-Ṣaff",
+   "versesCount": 14,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 62,
+   "nameAr": "الجُمعَة",
+   "nameEn": "Al-Jumu‘ah",
+   "versesCount": 11,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 63,
+   "nameAr": "المُنَافِقُونَ",
+   "nameEn": "Al-Munāfiqūn",
+   "versesCount": 11,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 64,
+   "nameAr": "التغَابُن",
+   "nameEn": "At-Taghābun",
+   "versesCount": 18,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 65,
+   "nameAr": "الطَّلَاق",
+   "nameEn": "Aṭ-Ṭalāq",
+   "versesCount": 12,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 67,
+   "nameAr": "المُلك",
+   "nameEn": "Al-Mulk",
+   "versesCount": 30,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 68,
+   "nameAr": "القَلَم",
+   "nameEn": "Al-Qalam",
+   "versesCount": 52,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 69,
+   "nameAr": "الحَاقة",
+   "nameEn": "Al-Ḥāqqah",
+   "versesCount": 52,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 70,
+   "nameAr": "المَعَارج",
+   "nameEn": "Al-Ma‘ārij",
+   "versesCount": 44,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 71,
+   "nameAr": "نُوح",
+   "nameEn": "Nūḥ",
+   "versesCount": 28,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 72,
+   "nameAr": "الجِن",
+   "nameEn": "Al-Jinn",
+   "versesCount": 28,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 73,
+   "nameAr": "المُزمل",
+   "nameEn": "Al-Muzzammil",
+   "versesCount": 20,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 75,
+   "nameAr": "القِيَامة",
+   "nameEn": "Al-Qiyāmah",
+   "versesCount": 40,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 76,
+   "nameAr": "الإنسَان",
+   "nameEn": "Al-Insān",
+   "versesCount": 31,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 77,
+   "nameAr": "المُرسَلات",
+   "nameEn": "Al-Mursalāt",
+   "versesCount": 50,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 78,
+   "nameAr": "النَّبَإ",
+   "nameEn": "An-Naba’",
+   "versesCount": 40,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 79,
+   "nameAr": "النَّازعَات",
+   "nameEn": "An-Nāzi‘āt",
+   "versesCount": 46,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 80,
+   "nameAr": "عَبَسَ",
+   "nameEn": "‘Abasa",
+   "versesCount": 42,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 81,
+   "nameAr": "التَّكوير",
+   "nameEn": "At-Takwīr",
+   "versesCount": 29,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 82,
+   "nameAr": "الانفِطَار",
+   "nameEn": "Al-Infiṭār",
+   "versesCount": 19,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 84,
+   "nameAr": "الانشِقَاق",
+   "nameEn": "Al-Inshiqāq",
+   "versesCount": 25,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 85,
+   "nameAr": "البُرُوج",
+   "nameEn": "Al-Burūj",
+   "versesCount": 22,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 86,
+   "nameAr": "الطَّارق",
+   "nameEn": "Aṭ-Ṭāriq",
+   "versesCount": 17,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 88,
+   "nameAr": "الغَاشِية",
+   "nameEn": "Al-Ghāshiyah",
+   "versesCount": 26,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 90,
+   "nameAr": "البَلَد",
+   "nameEn": "Al-Balad",
+   "versesCount": 20,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 91,
+   "nameAr": "الشَّمس",
+   "nameEn": "Ash-Shams",
+   "versesCount": 15,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 92,
+   "nameAr": "اللَّيل",
+   "nameEn": "Al-Lail",
+   "versesCount": 21,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 93,
+   "nameAr": "الضُّحى",
+   "nameEn": "Aḍ-Ḍuḥā",
+   "versesCount": 11,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 95,
+   "nameAr": "التِّين",
+   "nameEn": "At-Tīn",
+   "versesCount": 8,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 96,
+   "nameAr": "العَلَق",
+   "nameEn": "Al-‘Alaq",
+   "versesCount": 19,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 97,
+   "nameAr": "القَدر",
+   "nameEn": "Al-Qadr",
+   "versesCount": 5,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 100,
+   "nameAr": "العَاديَات",
+   "nameEn": "Al-‘Ādiyāt",
+   "versesCount": 11,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 101,
+   "nameAr": "القَارعَة",
+   "nameEn": "Al-Qāri‘ah",
+   "versesCount": 11,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 102,
+   "nameAr": "التَّكاثُر",
+   "nameEn": "At-Takāthur",
+   "versesCount": 8,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 105,
+   "nameAr": "الفِيل",
+   "nameEn": "Al-Fīl",
+   "versesCount": 5,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 106,
+   "nameAr": "قُرَيش",
+   "nameEn": "Quraish",
+   "versesCount": 4,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 107,
+   "nameAr": "المَاعُون",
+   "nameEn": "Al-Mā‘ūn",
+   "versesCount": 7,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 108,
+   "nameAr": "الكَوثر",
+   "nameEn": "Al-Kauthar",
+   "versesCount": 3,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 109,
+   "nameAr": "الكافِرون",
+   "nameEn": "Al-Kāfirūn",
+   "versesCount": 6,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 110,
+   "nameAr": "النَّصر",
+   "nameEn": "An-Naṣr",
+   "versesCount": 3,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 111,
+   "nameAr": "المَسَد",
+   "nameEn": "Al-Masad",
+   "versesCount": 5,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 112,
+   "nameAr": "الإخلَاص",
+   "nameEn": "Al-Ikhlāṣ",
+   "versesCount": 4,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 113,
+   "nameAr": "الفَلَق",
+   "nameEn": "Al-Falaq",
+   "versesCount": 5,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  },
+  {
+   "surah": 114,
+   "nameAr": "النَّاس",
+   "nameEn": "An-Nās",
+   "versesCount": 6,
+   "reason": "no verse from the book \"علمتني آية\" in this surah; deferred until after the hackathon"
+  }
+ ]
+}

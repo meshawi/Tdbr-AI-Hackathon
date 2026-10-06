@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useSettings } from '../hooks/useSettings';
 import { useUserData } from '../hooks/useUserData';
 import { CloseIcon } from './Icons';
-import type { Theme, ViewMode, Lang } from '../lib/types';
+import type { Theme, ViewMode } from '../lib/types';
 
 export function SettingsDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { settings, update, t } = useSettings();
@@ -17,7 +17,6 @@ export function SettingsDrawer({ open, onClose }: { open: boolean; onClose: () =
 
   const themes: Theme[] = ['light', 'dark', 'sepia'];
   const views: ViewMode[] = ['verse', 'reading'];
-  const langs: Lang[] = ['ar', 'en'];
 
   return (
     <>
@@ -27,17 +26,6 @@ export function SettingsDrawer({ open, onClose }: { open: boolean; onClose: () =
           <h2>{t('settings')}</h2>
           <button className="icon-btn" onClick={onClose} aria-label={t('close')}><CloseIcon /></button>
         </div>
-
-        <section className="drawer__section">
-          <h3>{t('language')}</h3>
-          <div className="seg">
-            {langs.map((l) => (
-              <button key={l} className={settings.lang === l ? 'is-active' : ''} onClick={() => update({ lang: l })}>
-                {l === 'ar' ? 'العربية' : 'English'}
-              </button>
-            ))}
-          </div>
-        </section>
 
         <section className="drawer__section">
           <h3>{t('theme')}</h3>

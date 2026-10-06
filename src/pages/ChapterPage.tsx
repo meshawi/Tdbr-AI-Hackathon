@@ -7,13 +7,12 @@ import { useSettings } from '../hooks/useSettings';
 import { getChapter, getChapters } from '../lib/api';
 import { num } from '../lib/format';
 import { parseVerseRef, resolveChapter } from '../lib/text';
-import type { Lang } from '../lib/types';
 import { NotFoundPage } from './NotFoundPage';
 
 /**
  * Handles quran.com-compatible URLs:
  *   /al-baqarah?startingVerse=14   /2?startingVerse=14   /2/14   /2:14
- *   /ar/al-baqarah?startingVerse=14  (locale prefix switches the UI language)
+ *   /ar/al-baqarah?startingVerse=14  (locale prefix is accepted and ignored)
  */
 export function ChapterPage() {
   const params = useParams();
@@ -22,14 +21,14 @@ export function ChapterPage() {
   const lang = settings.lang;
 
   const segs = [params.a, params.b, params.c].filter((x): x is string => !!x);
-  const localePrefix = segs[0] === 'ar' || segs[0] === 'en' ? (segs.shift() as Lang) : null;
+  // quran.com links may carry a locale prefix; the site is Arabic-only, so it is just dropped
+  if (segs[0] === 'ar' || segs[0] === 'en') segs.shift();
 
   const viewParam = search.get('view');
   useEffect(() => {
-    if (localePrefix && localePrefix !== settings.lang) update({ lang: localePrefix });
     if ((viewParam === 'reading' || viewParam === 'verse') && viewParam !== settings.view) update({ view: viewParam });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [localePrefix, viewParam]);
+  }, [viewParam]);
 
   const { data: chapters, loading: l1, error: e1 } = useAsync(() => getChapters(), []);
 
@@ -50,7 +49,7 @@ export function ChapterPage() {
   const { data, loading: l2, error: e2 } = useAsync(() => (chapterId ? getChapter(chapterId) : undefined), [chapterId]);
 
   useEffect(() => {
-    if (resolved) document.title = `${resolved.chapter.nameAr} | ${resolved.chapter.nameEn} - ${t('appTitle')}`;
+    if (resolved) document.title = `${resolved.chapter.nameAr} - ${t('appTitle')}`;
   }, [resolved, t]);
 
   if (l1 || (chapterId && l2)) return <Loading />;

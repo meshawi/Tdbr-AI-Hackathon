@@ -106,7 +106,8 @@ export function QuranReader({ segments, initialVerseKey = null, showHeaders = tr
     return () => { io.disconnect(); setVisibleKeys(new Map()); };
   }, [reflectionKeys, segments, settings.view, settings.showReflections]);
 
-  const glowKeys = useMemo(() => new Set(visibleKeys.keys()), [visibleKeys]);
+  // Closing the panel stops that verse's glow (it keeps a faint tint) until it leaves the viewport and comes back.
+  const glowKeys = useMemo(() => new Set([...visibleKeys.keys()].filter((k) => !dismissed.has(k))), [visibleKeys, dismissed]);
 
   // The panel shows the topmost visible reflection verse that has not been dismissed.
   const pulse = useMemo<{ key: string; reflections: Reflection[] } | null>(() => {
@@ -147,7 +148,7 @@ export function QuranReader({ segments, initialVerseKey = null, showHeaders = tr
       </div>
 
       {settings.view === 'reading' ? (
-        <ReadingView segments={segments} activeKey={activeKey} glowKeys={glowKeys} reflectionKeys={reflectionKeys} onActivate={activate} selectedWord={selectedWord} onSelectWord={setSelectedWord} />
+        <ReadingView segments={segments} activeKey={activeKey} glowKeys={glowKeys} fadedKeys={dismissed} reflectionsByVerse={reflections.byVerse} onActivate={activate} selectedWord={selectedWord} onSelectWord={setSelectedWord} />
       ) : (
         segments.map((seg) => (
           <section key={seg.chapter.id} className="segment">
@@ -164,6 +165,7 @@ export function QuranReader({ segments, initialVerseKey = null, showHeaders = tr
                     verse={v}
                     active={activeKey === key}
                     glow={glowKeys.has(key)}
+                    faded={dismissed.has(key)}
                     reflections={reflections.byVerse.get(key)}
                     onActivate={() => activate(key)}
                     selectedWord={selectedWord}
@@ -180,7 +182,12 @@ export function QuranReader({ segments, initialVerseKey = null, showHeaders = tr
         <ReflectionPulse
           verseKey={pulse.key}
           reflections={pulse.reflections}
-          onDismiss={() => setDismissed((d) => new Set(d).add(pulse.key))}
+          onDismiss={() => setDismissed((d) => {
+            // a reflection can span several verses; close it for all of them, not just the topmost
+            const next = new Set(d).add(pulse.key);
+            for (const r of pulse.reflections) for (const k of r.verseKeys) next.add(k);
+            return next;
+          })}
         />
       )}
 

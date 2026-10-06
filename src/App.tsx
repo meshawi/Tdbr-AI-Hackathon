@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Footer } from './components/Footer';
 import { Navbar } from './components/Navbar';
 import { SettingsDrawer } from './components/SettingsDrawer';
 import { SettingsProvider } from './hooks/useSettings';
@@ -31,6 +32,7 @@ export default function App() {
               <Route path="/:a/:b/:c" element={<ChapterPage />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
+            <Footer />
           </BrowserRouter>
         </ToastProvider>
       </UserDataProvider>
