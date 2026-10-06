@@ -46,10 +46,10 @@ class Reranker:
         self.model = AutoModelForSequenceClassification.from_pretrained(RERANKER_ID, torch_dtype=dtype).to(self.device).eval()
 
     @torch.inference_mode()
-    def score(self, query: str, docs: list[str], batch_size: int = 16) -> list[float]:
+    def score(self, query: str, docs: list[str], batch_size: int = 16, max_length: int = 1024) -> list[float]:
         out: list[float] = []
         for i in range(0, len(docs), batch_size):
-            enc = self.tok([query] * len(docs[i : i + batch_size]), docs[i : i + batch_size], padding=True, truncation=True, max_length=1024, return_tensors="pt").to(self.device)
+            enc = self.tok([query] * len(docs[i : i + batch_size]), docs[i : i + batch_size], padding=True, truncation=True, max_length=max_length, return_tensors="pt").to(self.device)
             out.extend(self.model(**enc).logits.view(-1).float().cpu().tolist())
         return out
 
@@ -125,10 +125,16 @@ def search(
     )
     hits = [{"score": pt.score, **pt.payload} for pt in res.points]
     if rerank and hits:
-        scores = get_reranker().score(q, [normalize(h["text"]) for h in hits])
-        for h, s in zip(hits, scores):
+        # CPU hosts: RAG_RERANK_TOP limits how many fused candidates are rescored and RAG_RERANK_MAXLEN shortens
+        # the query+passage pair (the cross-encoder is ~570M parameters; 30 x 1024 tokens takes minutes on 4 cores).
+        top = int(os.environ.get("RAG_RERANK_TOP", "0") or len(hits))
+        maxlen = int(os.environ.get("RAG_RERANK_MAXLEN", "1024"))
+        head, tail = hits[:top], hits[top:]
+        scores = get_reranker().score(q, [normalize(h["text"]) for h in head], max_length=maxlen)
+        for h, s in zip(head, scores):
             h["rerank_score"] = s
-        hits.sort(key=lambda h: h["rerank_score"], reverse=True)
+        head.sort(key=lambda h: h["rerank_score"], reverse=True)
+        hits = head + tail
     hits = hits[:top_k]
     for h in hits:
         h["citation"] = citation(h)

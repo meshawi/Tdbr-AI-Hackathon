@@ -184,7 +184,7 @@ def main() -> None:
             "surface": "redteam",
             "stream": False,
         }
-        req = urllib.request.Request(args.api + "/api/chat", data=json.dumps(body, ensure_ascii=False).encode("utf8"), headers={"Content-Type": "application/json; charset=utf-8"})
+        req = urllib.request.Request(args.api + "/api/chat", data=json.dumps(body, ensure_ascii=False).encode("utf8"), headers={"Content-Type": "application/json; charset=utf-8", "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) tdbr-redteam/1.0"})  # Cloudflare bot protection rejects the default urllib agent
         t0 = time.time()
         try:
             d = json.load(urllib.request.urlopen(req, timeout=600))

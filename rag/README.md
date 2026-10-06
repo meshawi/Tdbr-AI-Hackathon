@@ -73,7 +73,10 @@ reflections rather than tafsir language, so the open-corpus figure is a hard low
 always knows the verse the reader is on, which is the filtered case.
 
 Environment variables: `QDRANT_URL` (default http://localhost:6333), `RAG_COLLECTION` (tafsir),
-`RAG_EMBED_MODEL`, `RAG_RERANKER`, `DEEPSEEK_API_KEY`, `DEEPSEEK_MODEL`, `DEEPSEEK_BASE_URL`.
+`RAG_EMBED_MODEL`, `RAG_RERANKER`, `RAG_RERANK` (0 disables the reranker), `RAG_PREFETCH` (candidates per prefetch, default 60),
+`RAG_RERANK_TOP` (rescore only the top N fused candidates; set ~12 on CPU), `RAG_RERANK_MAXLEN` (pair length, 512 on CPU),
+`DEEPSEEK_API_KEY`, `DEEPSEEK_MODEL`, `DEEPSEEK_BASE_URL`. On a 4-core CPU host the full reranker (30 x 1024 tokens) takes minutes,
+which exceeds Cloudflare's 100 s first-byte limit; use `RAG_RERANK=0` or the two limits above.
 
 ## Chat route (`POST /api/chat`)
 

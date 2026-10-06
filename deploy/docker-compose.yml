@@ -27,6 +27,8 @@ services:
       DEEPSEEK_REASONING_EFFORT: ${DEEPSEEK_REASONING_EFFORT:-medium}
       RAG_RERANK: ${RAG_RERANK:-1}
       RAG_PREFETCH: ${RAG_PREFETCH:-30}
+      RAG_RERANK_TOP: ${RAG_RERANK_TOP:-12}       # CPU: rescore only the top fused candidates
+      RAG_RERANK_MAXLEN: ${RAG_RERANK_MAXLEN:-512}
     volumes:
       - api_data:/app/rag/data          # chat_log.jsonl (fresh in production)
     expose:
