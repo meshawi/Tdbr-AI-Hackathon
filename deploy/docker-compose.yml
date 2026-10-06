@@ -1,5 +1,7 @@
-# Coolify: "Docker Compose" resource pointing at this file. Attach the public domain to the `web` service
-# (port 80). `api` and `qdrant` stay internal. Set the environment variables in Coolify, never in git.
+# Coolify: "Docker Compose" resource, Base Directory "/", Docker Compose Location "/deploy/docker-compose.yml".
+# Coolify runs compose with the repository root as the project directory, so build paths below are relative
+# to the repo root (not to this file). Run it locally the same way: docker compose --project-directory . -f deploy/docker-compose.yml up
+# Attach the public domain to the `web` service (port 80). `api` and `qdrant` stay internal. Env vars live in Coolify, never in git.
 services:
   qdrant:
     image: qdrant/qdrant:v1.19.2
@@ -11,7 +13,7 @@ services:
 
   api:
     build:
-      context: ..
+      context: .
       dockerfile: rag/Dockerfile
     restart: unless-stopped
     depends_on:
@@ -32,7 +34,7 @@ services:
 
   web:
     build:
-      context: ..
+      context: .
       dockerfile: deploy/web.Dockerfile
     restart: unless-stopped
     depends_on:
