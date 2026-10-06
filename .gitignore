@@ -4,3 +4,7 @@ dist/
 *.log
 .DS_Store
 .cache/
+rag/.venv/
+rag/qdrant_storage/
+rag/data/
+rag/models/

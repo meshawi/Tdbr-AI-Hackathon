@@ -1,0 +1,13 @@
+# Python 3.14 venv created with: uv venv rag/.venv --python 3.14
+# torch is installed from the CUDA 12.8 index:
+#   uv pip install --python rag/.venv/Scripts/python.exe torch --index-url https://download.pytorch.org/whl/cu128
+torch
+transformers>=4.45
+huggingface_hub
+safetensors
+numpy
+tqdm
+qdrant-client>=1.12
+fastapi
+uvicorn[standard]
+openai
