@@ -2,6 +2,7 @@ import { useEffect, useMemo } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { Loading, ErrorBox } from '../components/Loading';
 import { QuranReader } from '../components/QuranReader';
+import { VersePicker } from '../components/VersePicker';
 import { useAsync } from '../hooks/useAsync';
 import { useSettings } from '../hooks/useSettings';
 import { getChapter, getChapters } from '../lib/api';
@@ -67,10 +68,7 @@ export function ChapterPage() {
       <div className="jump-row" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
         <label className="jump">
           <span className="muted">{t('goToVerse')}</span>
-          <select value={resolved.verse ?? ''} onChange={(e) => setSearch(e.target.value ? { startingVerse: e.target.value } : {})}>
-            <option value="">—</option>
-            {data.verses.map((v) => <option key={v.n} value={v.n}>{num(v.n, lang)}</option>)}
-          </select>
+          <VersePicker verses={data.verses} value={resolved.verse} onPick={(a) => setSearch({ startingVerse: String(a) })} />
         </label>
         <span className="muted">{t('page')} {num(chapter.pages[0], lang)}–{num(chapter.pages[1], lang)} · {t('juz')} {num(chapter.juz[0], lang)}{chapter.juz[1] !== chapter.juz[0] ? `–${num(chapter.juz[1], lang)}` : ''}</span>
       </div>

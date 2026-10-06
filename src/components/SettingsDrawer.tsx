@@ -15,7 +15,7 @@ export function SettingsDrawer({ open, onClose }: { open: boolean; onClose: () =
     return () => window.removeEventListener('keydown', onKey);
   }, [open, onClose]);
 
-  const themes: Theme[] = ['light', 'dark', 'sepia'];
+  const themes: Theme[] = ['light', 'dark'];
   const views: ViewMode[] = ['verse', 'reading'];
 
   return (
@@ -69,6 +69,24 @@ export function SettingsDrawer({ open, onClose }: { open: boolean; onClose: () =
           <label className="switch">
             <input type="checkbox" checked={settings.showReflections} onChange={(e) => update({ showReflections: e.target.checked })} />
             <span>{t('showReflections')}</span>
+          </label>
+          <label className="switch">
+            <input type="checkbox" checked={settings.hideCitations} onChange={(e) => update({ hideCitations: e.target.checked })} />
+            <span>{t('hideCitations')}</span>
+          </label>
+          <label className="switch">
+            <input type="checkbox" checked={settings.showThinking} onChange={(e) => update({ showThinking: e.target.checked })} />
+            <span>{t('showThinking')}</span>
+          </label>
+          <label className="select-row">
+            <span>{t('reasoningEffort')}</span>
+            <select className="select" value={settings.reasoningEffort} onChange={(e) => update({ reasoningEffort: e.target.value as typeof settings.reasoningEffort })}>
+              <option value="">{t('reasoningDefault')}</option>
+              <option value="low">{t('reasoningLow')}</option>
+              <option value="medium">{t('reasoningMedium')}</option>
+              <option value="high">{t('reasoningHigh')}</option>
+              <option value="max">{t('reasoningMax')}</option>
+            </select>
           </label>
         </section>
 

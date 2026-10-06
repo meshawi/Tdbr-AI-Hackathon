@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 
-/** A question the reader asked about a verse / reflection. Stored locally for now; AI answering comes later. */
+/** A question the reader asked about a verse / reflection, with the answer once it arrived. Kept locally as a study log. */
 export interface VerseQuestion {
   id: string;
   verseKey: string;
@@ -31,6 +31,7 @@ export function useQuestions(verseKey?: string) {
   }, []);
 
   const remove = useCallback((id: string) => setAll((list) => list.filter((q) => q.id !== id)), []);
+  const setAnswer = useCallback((id: string, answer: string) => setAll((list) => list.map((q) => (q.id === id ? { ...q, answer } : q))), []);
 
-  return { questions: verseKey ? all.filter((q) => q.verseKey === verseKey) : all, ask, remove };
+  return { questions: verseKey ? all.filter((q) => q.verseKey === verseKey) : all, ask, remove, setAnswer };
 }

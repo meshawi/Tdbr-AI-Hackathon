@@ -12,6 +12,7 @@ import argparse
 import json
 import os
 import sys
+import threading
 from functools import lru_cache
 
 sys.path.insert(0, os.path.dirname(__file__))
@@ -56,10 +57,15 @@ class Reranker:
 _reranker: Reranker | None = None
 
 
+_reranker_lock = threading.Lock()
+
+
 def get_reranker() -> Reranker:
     global _reranker
     if _reranker is None:
-        _reranker = Reranker()
+        with _reranker_lock:
+            if _reranker is None:
+                _reranker = Reranker()
     return _reranker
 
 
@@ -94,9 +100,14 @@ def search(
     ayah_to: int | None = None,
     book_ids: list[int] | None = None,
     categories: list[str] | None = None,
-    rerank: bool = True,
-    prefetch: int = 60,
+    rerank: bool | None = None,
+    prefetch: int | None = None,
 ) -> list[dict]:
+    # production without a GPU: RAG_RERANK=0 or a smaller RAG_PREFETCH keeps latency acceptable
+    if rerank is None:
+        rerank = os.environ.get("RAG_RERANK", "1") != "0"
+    if prefetch is None:
+        prefetch = int(os.environ.get("RAG_PREFETCH", "60"))
     q = normalize(query)
     emb = get_embedder().encode([q], batch_size=1, max_length=256)
     dense = emb.dense[0].tolist()

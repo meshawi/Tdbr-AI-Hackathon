@@ -1,5 +1,7 @@
 # Quran Reader (React)
 
+**Hackathon submission summary (problem, solution, AI use, sources, safety, limitations, operation): see [SUBMISSION.md](SUBMISSION.md).**
+
 A backend-free Quran reading website modelled on quran.com, built with React 19, Vite and TypeScript.
 All Quranic content is the **official developer release of the King Fahd Glorious Qur'an Printing Complex (KFGQPC)**: https://qurancomplex.gov.sa/quran-dev/
 
@@ -45,7 +47,8 @@ npm run verify:data  # integrity check of public/data
   word position, imlaei spelling, copy, and a persistent word highlight.
 - Per-verse actions: tafsir (Tafseer Muyassar), copy text, copy link, bookmark, highlight.
 - Sticky context bar (surah, juz, page, current ayah) and "continue reading" memory.
-- Settings: Arabic/English UI, light/dark/sepia themes, 7 font sizes, tafsir always-on, word popovers on/off.
+- Settings: light (brown) / dark themes, 7 font sizes, tafsir always-on, word popovers on/off, reflections on/off,
+  assistant options (hide citation chips, live thinking trace, reasoning effort).
 - Client-side search over the imlaei text, diacritic-insensitive, with chapter-name and `2:14` reference matching.
 - Everything persists in `localStorage`; no backend required.
 
@@ -118,6 +121,8 @@ public/data/        generated JSON (chapters, surah/N, tafsir/N, pages, juzs, se
 public/fonts/       KFGQPC fonts
 src/lib/            types, fetch layer, formatting, i18n, Arabic normalisation, URL resolution
 src/hooks/          settings, user data (bookmarks/highlights), async loader, toast
-src/components/     Navbar, SettingsDrawer, ChapterHeader, QuranReader, VerseItem, VerseText (words + popover), ReadingView, TafsirBox
-src/pages/          Home, Chapter, Juz, Page, Search, NotFound
+src/components/     Navbar, SettingsDrawer, ChapterHeader, QuranReader, VerseItem, VerseText (words + popover), ReadingView, TafsirBox,
+                    ReflectionBox (reflection, pulse, question box), ChatPanel, ChatAnswer, VersePicker, Showcase
+src/pages/          Home, Chapter, Juz, JuzIndex, Page, PageIndex, Search, AIHistory, NotFound
+rag/                retrieval + assistant backend (see rag/README.md)
 ```

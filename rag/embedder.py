@@ -8,6 +8,7 @@ Implemented directly on transformers so it runs on Python 3.14 without the FlagE
 from __future__ import annotations
 
 import os
+import threading
 from dataclasses import dataclass
 
 import numpy as np
@@ -77,8 +78,14 @@ class BgeM3:
 _singleton: BgeM3 | None = None
 
 
+_lock = threading.Lock()
+
+
 def get_embedder() -> BgeM3:
+    """Process-wide singleton; the lock keeps concurrent first requests from using a half-loaded model."""
     global _singleton
     if _singleton is None:
-        _singleton = BgeM3()
+        with _lock:
+            if _singleton is None:
+                _singleton = BgeM3()
     return _singleton

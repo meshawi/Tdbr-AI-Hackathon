@@ -8,3 +8,17 @@ rag/.venv/
 rag/qdrant_storage/
 rag/data/
 rag/models/
+rag/.env
+.env
+rag/redteam/results.jsonl
+
+# python
+__pycache__/
+*.pyc
+
+# hackathon organiser pack (third-party originals, not part of the product)
+HackathonReglationsAndDetials/
+
+# decks and production artefacts stay outside the repo
+*.pptx
+tsconfig.tsbuildinfo

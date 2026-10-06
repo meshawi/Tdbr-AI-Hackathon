@@ -37,7 +37,7 @@ prepare_chunks.py  corpus -> rag/data/passages.jsonl (dedupe, drop stubs, split 
 embedder.py        BGE-M3 dense + sparse on transformers (Python 3.14 compatible)
 build_index.py     embed + upsert into Qdrant, resumable, HNSW deferred until upload ends
 search.py          hybrid search with filters + reranker; `search()` and a CLI
-serve.py           FastAPI: /search, /answer (DeepSeek with citations), /health
+serve.py           FastAPI: /health, /search, /answer, /api/chat (SSE), /api/history, /api/history/{id}, /api/coverage
 eval_retrieval.py  recall@k on the 105 reflection comments (labelled by verse)
 ```
 
@@ -74,6 +74,86 @@ always knows the verse the reader is on, which is the filtered case.
 
 Environment variables: `QDRANT_URL` (default http://localhost:6333), `RAG_COLLECTION` (tafsir),
 `RAG_EMBED_MODEL`, `RAG_RERANKER`, `DEEPSEEK_API_KEY`, `DEEPSEEK_MODEL`, `DEEPSEEK_BASE_URL`.
+
+## Chat route (`POST /api/chat`)
+
+Request: `{"current_verse_id": "2:255", "chat_history": [{"role": "user"|"assistant", "content": "..."}], "user_message": "...", "stream": true, "context_note": "...", "brief": false}`.
+`context_note` is appended to the system context (the reflection pulse sends the reflection text so "explain
+more" means the reflection). `brief: true` is the reflection-pulse mode: two to three sentences, one tool
+round, medium reasoning effort, ~10–20 s instead of ~15–30 s. The two surfaces (floating chat and the
+pulse question box) share this route and the same answer renderer (`src/components/ChatAnswer.tsx`).
+Response: Server-Sent Events, one JSON object per `data:` line:
+
+| event | payload | meaning |
+| --- | --- | --- |
+| `sources` | `{sources: [{n, citation, book_id, book_name, author, surah, surah_name, ayah_from, ayah_to, book_page, source_url}]}` | passages the model was given (first for the verse, later for tool results) |
+| `thinking` | – | the model started reasoning |
+| `retry` | `{reason, effort}` | thinking used the whole token budget before any answer; the round is retried once at a lighter effort |
+| `tool` | `{name, query}` | `search_other_verses` was called with this query |
+| `delta` | `{text}` | streamed answer text; `[n]` refers to source `n` |
+| `error` | `{message}` | API or configuration error |
+| `done` | `{model}` | end of answer |
+
+With `"stream": false` the route returns `{"answer", "sources", "tool_queries", "error"}` instead.
+
+Flow: before the first model call the route retrieves, for the active verse, its KFGQPC text, its
+"علمتني آية" reflection (if any) and the top 6 tafsir passages for the user's question (surah/ayah
+filtered), and puts them in the system context. DeepSeek is called with the `search_other_verses` tool
+(hybrid search over the whole index, 6 passages, deduplicated against the ones already shown). When the
+model emits tool calls, the assistant turn is appended back **with its `reasoning_content`** (required by
+DeepSeek), then the tool messages, and the model is called again; at most 2 tool rounds. Model settings:
+`DEEPSEEK_MODEL` (default `deepseek-flash`), `thinking: {type: enabled}`, `reasoning_effort` from
+`DEEPSEEK_REASONING_EFFORT` (default `medium`) or the request. Thinking tokens count toward `max_tokens`, so the
+budget scales with effort (`TOKEN_BUDGET`: low 6k, medium 8k, high 12k, max 16k). If a round returns no answer text it
+is retried once: `finish_reason=length` (thinking ate the budget) retries at a lighter effort, `finish_reason=stop`
+(the model drafted the answer inside its reasoning) retries at the same effort with a nudge to write the final answer
+(`length_retry` in the trace records reason and efforts; the SSE stream gets a `retry` event). If the
+configured model is rejected the route falls back to `DEEPSEEK_FALLBACK_MODEL` (`deepseek-chat`) once.
+
+Guardrails live in `SYSTEM_PROMPT` in `serve.py`: Quran, tafsir, Arabic linguistics and reflection only;
+polite one-sentence refusal that steers back to the active verse; 3–5 sentences unless asked for detail;
+cite `[n]`; say so when sources are insufficient; no contemporary fatwas.
+
+Frontend: `src/components/ChatPanel.tsx` (floating button in the reader, bound to the selected verse or the
+verse at the top of the viewport), `src/lib/chat.ts` (SSE client). Vite proxies `/api` to the service
+(`vite.config.ts`, `RAG_API_URL` to override).
+
+Secrets: `rag/.env` (git-ignored) holds `DEEPSEEK_API_KEY`; `rag/.env.example` lists the variables.
+
+## Trace log and AI-history page
+
+Every `/api/chat` call appends one record to `rag/data/chat_log.jsonl`: the raw and sanitised question,
+surface (chat / pulse / redteam), verse, the context given to the model (verse text, reflection, note),
+every retrieved source with stage (verse retrieval or tool search), retrieval query, RRF and reranker
+scores and full text, tool calls and their results, the model's reasoning per round, finish reasons,
+the answer, which sources it cited, timings, errors and flags (invisible characters removed, suspected
+system-prompt leak, empty answer). `GET /api/history` lists them, `GET /api/history/{id}` returns one with,
+per source, the reasoning sentences that mention its number and whether the answer cited it. The site
+shows this at `/ai-history` and `/ai-history/{id}?source=n`; clicking a source in any answer opens that page.
+
+Input hardening (`sanitize()`): NFKC normalisation (fullwidth/mathematical letters fold to plain), removal
+of zero-width characters, bidi controls, soft hyphens and Unicode tag characters (U+E0000–E007F, the
+"invisible instruction" smuggling trick), 4,000-character cap. Applied to the message, history and the
+context note before anything reaches the model; the trace keeps the raw text when it differed.
+
+## Red-team suite (`rag/redteam/`)
+
+`prompts.json` holds 100 adversarial prompts across override, persona (DAN, developer mode, games,
+"for a novel"), system-prompt extraction (direct, JSON, base64/hex), encoding/Unicode smuggling (tags,
+zero-width, RTL override, homoglyphs, fullwidth, reversed, chained), indirect injection, harmful-via-Quran
+framing, social engineering, multi-turn history injection (fake assistant consent, fake system turn),
+injection through `context_note`, odd verse ids, tool abuse, output-format attacks, scope escape, and
+benign controls that must be answered. `run.py` sends them through the live route with surface `redteam`,
+classifies each answer (PASS / FAIL / REVIEW: refusal phrases, leak markers, `must` / `must_not` /
+`tool_must_not` patterns, `max_tools`, `graceful_error`) and writes `REPORT.md` with a link to each trace.
+Last full run: 100 pass, 0 fail, 0 review. Re-run after any prompt or guardrail change:
+
+```
+rag/.venv/Scripts/python.exe rag/redteam/run.py --dry-run        # encode + validate, no API calls
+rag/.venv/Scripts/python.exe rag/redteam/run.py                  # all 100 against http://127.0.0.1:8000
+rag/.venv/Scripts/python.exe rag/redteam/run.py --ids 24,25      # a subset
+rag/.venv/Scripts/python.exe rag/redteam/run.py --reclassify     # re-score saved answers offline, rewrite REPORT.md
+```
 
 ## Answer contract for the backend
 

@@ -1,0 +1,45 @@
+# Coolify: "Docker Compose" resource pointing at this file. Attach the public domain to the `web` service
+# (port 80). `api` and `qdrant` stay internal. Set the environment variables in Coolify, never in git.
+services:
+  qdrant:
+    image: qdrant/qdrant:v1.19.2
+    restart: unless-stopped
+    volumes:
+      - qdrant_storage:/qdrant/storage
+    expose:
+      - "6333"
+
+  api:
+    build:
+      context: ..
+      dockerfile: rag/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      - qdrant
+    environment:
+      QDRANT_URL: http://qdrant:6333
+      DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY}
+      DEEPSEEK_BASE_URL: ${DEEPSEEK_BASE_URL:-https://api.deepseek.com/v1}
+      DEEPSEEK_MODEL: ${DEEPSEEK_MODEL:-deepseek-flash}
+      DEEPSEEK_FALLBACK_MODEL: ${DEEPSEEK_FALLBACK_MODEL:-deepseek-chat}
+      DEEPSEEK_REASONING_EFFORT: ${DEEPSEEK_REASONING_EFFORT:-medium}
+      RAG_RERANK: ${RAG_RERANK:-1}
+      RAG_PREFETCH: ${RAG_PREFETCH:-30}
+    volumes:
+      - api_data:/app/rag/data          # chat_log.jsonl (fresh in production)
+    expose:
+      - "8000"
+
+  web:
+    build:
+      context: ..
+      dockerfile: deploy/web.Dockerfile
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      - "80"
+
+volumes:
+  qdrant_storage:
+  api_data:

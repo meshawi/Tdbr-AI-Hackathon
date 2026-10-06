@@ -12,6 +12,9 @@ import { JuzPage } from './pages/JuzPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { PagePage } from './pages/PagePage';
 import { SearchPage } from './pages/SearchPage';
+import { AIHistoryPage } from './pages/AIHistoryPage';
+import { JuzIndexPage } from './pages/JuzIndexPage';
+import { PageIndexPage } from './pages/PageIndexPage';
 
 export default function App() {
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -25,7 +28,11 @@ export default function App() {
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/search" element={<SearchPage />} />
+              <Route path="/ai-history" element={<AIHistoryPage />} />
+              <Route path="/ai-history/:id" element={<AIHistoryPage />} />
+              <Route path="/juz" element={<JuzIndexPage />} />
               <Route path="/juz/:n" element={<JuzPage />} />
+              <Route path="/page" element={<PageIndexPage />} />
               <Route path="/page/:n" element={<PagePage />} />
               <Route path="/:a" element={<ChapterPage />} />
               <Route path="/:a/:b" element={<ChapterPage />} />

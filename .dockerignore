@@ -1,0 +1,19 @@
+# Keep image builds small: the web image needs the source + public/; the api image needs rag/*.py,
+# rag/coverage.json, public/data and scripts/chapter-meta.mjs. Nothing below is needed in a container.
+.git
+.cache
+node_modules
+dist
+rag/.venv
+rag/data
+rag/models
+rag/qdrant_storage
+rag/.env
+.env
+data/tafsir
+data/kfgqpc
+HackathonReglationsAndDetials
+**/__pycache__
+*.log
+*.pptx
+*.pdf

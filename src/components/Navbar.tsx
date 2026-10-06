@@ -27,7 +27,7 @@ export function Navbar({ onOpenSettings }: { onOpenSettings: () => void }) {
     setQ('');
   };
 
-  const nextTheme = settings.theme === 'light' ? 'dark' : settings.theme === 'dark' ? 'sepia' : 'light';
+  const nextTheme = settings.theme === 'dark' ? 'light' : 'dark';
 
   return (
     <header className="navbar">
@@ -42,8 +42,9 @@ export function Navbar({ onOpenSettings }: { onOpenSettings: () => void }) {
 
         <nav className="navbar__links" aria-label="main">
           <Link to="/">{t('surahs')}</Link>
-          <Link to="/juz/1">{t('juzs')}</Link>
-          <Link to="/page/1">{t('page')}</Link>
+          <Link to="/juz">{t('juzs')}</Link>
+          <Link to="/page">{t('pages')}</Link>
+          <Link to="/ai-history">{t('aiHistory')}</Link>
         </nav>
 
         <form className="navbar__search" onSubmit={submit} role="search">

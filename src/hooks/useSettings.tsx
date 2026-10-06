@@ -12,6 +12,12 @@ export interface Settings {
   wordTooltips: boolean;
   /** glow + pulse panel for verses that have a reflection in "علمتني آية" */
   showReflections: boolean;
+  /** hide the [n] citation chips inside AI answers (the collapsible source list always stays) */
+  hideCitations: boolean;
+  /** show the model's live reasoning while it thinks (collapses when the answer starts) */
+  showThinking: boolean;
+  /** DeepSeek reasoning effort sent with each question ('' = server default) */
+  reasoningEffort: '' | 'low' | 'medium' | 'high' | 'max';
 }
 
 const DEFAULTS: Settings = {
@@ -22,6 +28,9 @@ const DEFAULTS: Settings = {
   showTafsir: false,
   wordTooltips: true,
   showReflections: true,
+  hideCitations: false,
+  showThinking: false,
+  reasoningEffort: '',
 };
 
 const KEY = 'quran.settings.v1';
@@ -30,7 +39,9 @@ function load(): Settings {
   try {
     const raw = localStorage.getItem(KEY);
     // The site is Arabic-only; ignore a language saved by older versions.
-    return raw ? { ...DEFAULTS, ...JSON.parse(raw), lang: 'ar' } : DEFAULTS;
+    const saved = raw ? JSON.parse(raw) : {};
+    if (saved.theme === 'sepia') saved.theme = 'light'; // the old sepia palette is now the light theme
+    return raw ? { ...DEFAULTS, ...saved, lang: 'ar' } : DEFAULTS;
   } catch {
     return DEFAULTS;
   }

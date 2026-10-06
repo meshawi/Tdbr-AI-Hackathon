@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Loading, ErrorBox } from '../components/Loading';
 import { QuranReader } from '../components/QuranReader';
 import { useAsync } from '../hooks/useAsync';
@@ -12,6 +12,7 @@ export function JuzPage() {
   const { n } = useParams();
   const juz = Number(n);
   const { settings, t } = useSettings();
+  const navigate = useNavigate();
   const valid = Number.isInteger(juz) && juz >= 1 && juz <= 30;
   const { data, loading, error } = useAsync(async () => {
     if (!valid) return undefined;
@@ -27,7 +28,15 @@ export function JuzPage() {
 
   return (
     <main className="page">
-      <h1 className="page-title">{t('juz')} {num(juz, settings.lang)}</h1>
+      <div className="jump-row" dir="rtl">
+        <h1 className="page-title" style={{ margin: 0 }}>{t('juz')} {num(juz, settings.lang)}</h1>
+        <label className="jump"><span className="muted">{t('pickJuz')}</span>
+          <select value={juz} onChange={(e) => navigate(`/juz/${e.target.value}`)}>
+            {Array.from({ length: 30 }, (_, i) => i + 1).map((j) => <option key={j} value={j}>{num(j, settings.lang)}</option>)}
+          </select>
+        </label>
+        <Link className="muted" to="/juz">{t('juzIndex')}</Link>
+      </div>
       <QuranReader segments={data} />
       <nav className="chapter-nav">
         {juz > 1 ? <Link className="btn" to={`/juz/${juz - 1}`}>{t('prevJuz')}</Link> : <span />}

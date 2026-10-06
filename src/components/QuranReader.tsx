@@ -10,6 +10,7 @@ import { ReadingView } from './ReadingView';
 import { VerseItem } from './VerseItem';
 import type { WordSelection } from './VerseText';
 import { ReflectionPulse } from './ReflectionBox';
+import { ChatPanel } from './ChatPanel';
 import { ArrowUpIcon } from './Icons';
 
 interface Props {
@@ -131,6 +132,15 @@ export function QuranReader({ segments, initialVerseKey = null, showHeaders = tr
 
   const activate = useCallback((key: string) => setActiveKey((k) => (k === key ? null : key)), []);
 
+  // The chat is bound to the selected verse, otherwise to the verse at the top of the viewport.
+  const chatKey = activeKey ?? (position ? `${position.chapter.id}:${position.verse}` : null);
+  const chatLabel = useMemo(() => {
+    if (!chatKey) return null;
+    const [s, a] = chatKey.split(':').map(Number);
+    const ch = chaptersById.get(s);
+    return ch ? `${ch.nameAr} · ${t('ayah')} ${num(a, lang)}` : chatKey;
+  }, [chatKey, chaptersById, lang, t]);
+
   return (
     <div className="reader">
       <div className="context-bar" aria-live="polite">
@@ -190,6 +200,8 @@ export function QuranReader({ segments, initialVerseKey = null, showHeaders = tr
           })}
         />
       )}
+
+      <ChatPanel verseKey={chatKey} verseLabel={chatLabel} />
 
       <button className={`to-top ${showTop ? 'is-visible' : ''}`} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} aria-label="top">
         <ArrowUpIcon />

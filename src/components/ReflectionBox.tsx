@@ -1,9 +1,12 @@
-import { useState, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
+import { useCoverage } from '../hooks/useCoverage';
 import { useQuestions } from '../hooks/useQuestions';
 import { useSettings } from '../hooks/useSettings';
 import { num } from '../lib/format';
+import { streamChat, type ChatTurn } from '../lib/chat';
 import type { Reflection } from '../lib/types';
+import { AssistantTurn } from './ChatAnswer';
 import { CloseIcon, SparkIcon } from './Icons';
 
 /** Inline reflection(s) under a verse (expanded from the badge). */
@@ -59,51 +62,114 @@ export function ReflectionPulse({ verseKey, reflections, onDismiss }: PulseProps
           <p key={x.id} className="reflection-pulse__comment">{x.comment}</p>
         ))}
         <span className="reflection-pulse__src muted">{t('reflectionSource')}</span>
-        <QuestionBox verseKey={verseKey} reflectionId={r.id} />
+        <QuestionBox verseKey={verseKey} reflection={r} />
       </div>
     </aside>
   );
 }
 
-/** Lets the reader ask about the reflection. For now the question is logged and listed here; AI answers come later. */
-function QuestionBox({ verseKey, reflectionId }: { verseKey: string; reflectionId: number }) {
+/**
+ * Ask about the reflection: same backend route as the chat panel (verse context + tafsir retrieval +
+ * DeepSeek with the cross-Quran tool), with a note that the question concerns the displayed reflection.
+ * The thread is kept per verse for the session; questions and answers are also logged locally.
+ */
+function QuestionBox({ verseKey, reflection }: { verseKey: string; reflection: Reflection }) {
   const { settings, t } = useSettings();
-  const { questions, ask, remove } = useQuestions(verseKey);
+  const { ask, setAnswer } = useQuestions(verseKey);
+  const supported = useCoverage().isCovered(verseKey);
   const [text, setText] = useState('');
+  const [turns, setTurns] = useState<ChatTurn[]>([]);
+  const [busy, setBusy] = useState(false);
+  const [status, setStatus] = useState<string | null>(null);
+  const abortRef = useRef<AbortController | null>(null);
+  const endRef = useRef<HTMLDivElement>(null);
 
-  const submit = (e: FormEvent) => {
-    e.preventDefault();
-    const q = text.trim();
-    if (!q) return;
-    ask({ verseKey, reflectionId, question: q });
+  useEffect(() => () => abortRef.current?.abort(), []);
+  useEffect(() => { endRef.current?.scrollIntoView({ block: 'nearest' }); }, [turns]);
+
+  const send = async (question: string) => {
+    const q = question.trim();
+    if (!q || busy || supported === false) return;
     setText('');
+    setBusy(true);
+    setStatus(null);
+    const logged = ask({ verseKey, reflectionId: reflection.id, question: q });
+    const history = turns.filter((x) => !x.error).map((x) => ({ role: x.role, content: x.content }));
+    setTurns((prev) => [...prev, { role: 'user', content: q }, { role: 'assistant', content: '', sources: [], pending: true }]);
+    const update = (patch: (a: ChatTurn) => ChatTurn) => setTurns((prev) => {
+      const next = prev.slice();
+      next[next.length - 1] = patch(next[next.length - 1]);
+      return next;
+    });
+    const ctrl = new AbortController();
+    abortRef.current = ctrl;
+    let answer = '';
+    try {
+      await streamChat({
+        current_verse_id: verseKey,
+        chat_history: history,
+        user_message: q,
+        context_note: `${t('reflectionFocusNote')} نص الفائدة: «${reflection.comment}»`,
+        brief: true,
+        surface: 'pulse',
+        reasoning_effort: settings.reasoningEffort || undefined,
+      }, (ev) => {
+        if (ev.type === 'sources') update((a) => ({ ...a, sources: [...(a.sources ?? []), ...ev.sources] }));
+        else if (ev.type === 'thinking') setStatus(settings.showThinking ? null : t('chatThinking'));
+        else if (ev.type === 'retry') setStatus(t('chatRetrying'));
+        else if (ev.type === 'reasoning') update((a) => ({ ...a, reasoning: (a.reasoning ?? '') + ev.text }));
+        else if (ev.type === 'tool') setStatus(`${t('chatSearching')} «${ev.query}»`);
+        else if (ev.type === 'delta') { setStatus(null); update((a) => (a.reasoningDone ? a : { ...a, reasoningDone: true })); answer += ev.text; update((a) => ({ ...a, content: a.content + ev.text })); }
+        else if (ev.type === 'error') update((a) => ({ ...a, error: ev.message, pending: false, logId: ev.log_id ?? a.logId }));
+        else if (ev.type === 'done') update((a) => ({ ...a, pending: false, reasoningDone: true, logId: ev.log_id }));
+      }, ctrl.signal);
+    } catch (err) {
+      if (!ctrl.signal.aborted) update((a) => ({ ...a, error: String(err), pending: false }));
+    } finally {
+      setBusy(false);
+      setStatus(null);
+      update((a) => ({ ...a, pending: false }));
+      if (answer) setAnswer(logged.id, answer);
+    }
   };
+
+  const submit = (e: FormEvent) => { e.preventDefault(); void send(text); };
+  const prompts: { key: 'promptExplain' | 'promptReason' | 'promptMeaning' | 'promptApply' }[] = [{ key: 'promptExplain' }, { key: 'promptReason' }, { key: 'promptMeaning' }, { key: 'promptApply' }];
 
   return (
     <div className="question" dir={settings.lang === 'ar' ? 'rtl' : 'ltr'}>
+      {turns.length > 0 && (
+        <div className="question__thread">
+          {turns.map((turn, i) => (
+            turn.role === 'user'
+              ? <div key={i} className="chat-msg chat-msg--user"><div className="chat-msg__bubble">{turn.content}</div></div>
+              : <AssistantTurn key={i} turn={turn} onRetry={i === turns.length - 1 ? () => { const q = turns[i - 1]?.content; setTurns((p) => p.slice(0, -2)); if (q) void send(q); } : undefined} />
+          ))}
+          {status && <div className="chat-status muted">{status}</div>}
+          <div ref={endRef} />
+        </div>
+      )}
+      {turns.length === 0 && (
+        <div className="question__prompts">
+          {prompts.map((p) => (
+            <button key={p.key} type="button" className="question__prompt" onClick={() => void send(t(p.key))} disabled={busy}>{t(p.key)}</button>
+          ))}
+        </div>
+      )}
+      {supported === false && <p className="chat-panel__unsupported">{t('chatUnsupported')}</p>}
       <form className="question__form" onSubmit={submit}>
         <textarea
           className="question__input"
           value={text}
           onChange={(e) => setText(e.target.value)}
-          onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submit(e); } }}
+          onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); void send(text); } }}
           placeholder={t('askPlaceholder')}
           rows={2}
+          disabled={busy || supported === false}
           aria-label={t('askPlaceholder')}
         />
-        <button type="submit" className="btn btn--small" disabled={!text.trim()}>{t('ask')}</button>
+        <button type="submit" className="btn btn--small" disabled={busy || !text.trim() || supported === false}>{t('ask')}</button>
       </form>
-      {questions.length > 0 && (
-        <ul className="question__list">
-          {questions.map((q) => (
-            <li key={q.id} className="question__item">
-              <span className="question__text">{q.question}</span>
-              <span className="question__meta muted">{t('questionPending')}</span>
-              <button className="icon-btn question__remove" onClick={() => remove(q.id)} aria-label={t('dismiss')}><CloseIcon width={14} height={14} /></button>
-            </li>
-          ))}
-        </ul>
-      )}
     </div>
   );
 }

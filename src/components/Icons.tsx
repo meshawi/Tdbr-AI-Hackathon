@@ -44,6 +44,12 @@ export const CheckIcon = (p: SVGProps<SVGSVGElement>) => (
 export const SparkIcon = (p: SVGProps<SVGSVGElement>) => (
   <svg {...base(p)}><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z" /><path d="M19 17l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7z" /></svg>
 );
+export const ChatIcon = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}><path d="M21 12a8 8 0 0 1-8 8H8l-5 3 1.5-4.5A8 8 0 1 1 21 12z" /><path d="M8 11h8M8 14h5" /></svg>
+);
+export const SendIcon = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}><path d="m22 2-7 20-4-9-9-4z" /><path d="M22 2 11 13" /></svg>
+);
 export const ArrowUpIcon = (p: SVGProps<SVGSVGElement>) => (
   <svg {...base(p)}><path d="M12 19V5M5 12l7-7 7 7" /></svg>
 );

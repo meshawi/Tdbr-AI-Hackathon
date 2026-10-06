@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Loading, ErrorBox } from '../components/Loading';
 import { useAsync } from '../hooks/useAsync';
 import { useSettings } from '../hooks/useSettings';
@@ -8,12 +8,15 @@ import { getChapters } from '../lib/api';
 import { chapterPath, num } from '../lib/format';
 import { matchChapters } from '../lib/text';
 import { BookmarkIcon } from '../components/Icons';
+import { Showcase } from '../components/Showcase';
 
 export function HomePage() {
   const { settings, t } = useSettings();
   const { bookmarks, lastRead } = useUserData();
   const { data: chapters, loading, error } = useAsync(() => getChapters(), []);
+  const navigate = useNavigate();
   const [tab, setTab] = useState<'surah' | 'juz'>('surah');
+  const goSearch = () => { const q = filter.trim(); if (q) navigate(`/search?q=${encodeURIComponent(q)}`); };
   const [filter, setFilter] = useState('');
   const [desc, setDesc] = useState(false);
   const lang = settings.lang;
@@ -37,17 +40,22 @@ export function HomePage() {
       <section className="hero">
         <h1 className="hero__title" dir="rtl">ٱلۡقُرۡءَانُ ٱلۡكَرِيمُ</h1>
         <p className="hero__sub">{t('appSubtitle')}</p>
-        <input
-          className="hero__search"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-          placeholder={t('searchPlaceholder')}
-          aria-label={t('search')}
-        />
+        <form className="hero__form" onSubmit={(e) => { e.preventDefault(); goSearch(); }} role="search">
+          <input
+            className="hero__search"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            placeholder={t('searchPlaceholder')}
+            aria-label={t('search')}
+          />
+        </form>
+        <p className="hero__hint muted">{t('homeSearchHint')}</p>
         {filter.trim() && (
-          <Link className="hero__full-search" to={`/search?q=${encodeURIComponent(filter.trim())}`}>{t('search')}: «{filter.trim()}» →</Link>
+          <Link className="hero__full-search btn" to={`/search?q=${encodeURIComponent(filter.trim())}`}>{t('searchVersesFor')} «{filter.trim()}»</Link>
         )}
       </section>
+
+      <Showcase />
 
       {(lastRead || bookmarkList.length > 0) && (
         <section className="quick">
